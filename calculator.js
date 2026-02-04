@@ -142,6 +142,9 @@ num_keys.forEach(key=>{
         if(operation.textContent === "0"){
             operation.textContent = e.target.textContent;
         }
+        else if(Number.isNaN(Number(operation.textContent)) && operation.textContent.at(-1) === "0"){
+            operation.textContent = operation.textContent.slice(0,-1) += e.target.textContent;
+        }
         else {operation.textContent += e.target.textContent;}
     });
 });
