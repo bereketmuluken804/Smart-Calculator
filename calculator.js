@@ -11,7 +11,9 @@ function multiply(a, b){
 }
 
 function divide(a, b){
-    return a / b;
+    num = a / b;
+    return Math.round(num * 1000) / 1000;
+
 }
 
 function swichSign(a){
@@ -24,14 +26,17 @@ function percentage(a){
 
 let first, op, second;
 
-function operate(first, op, second=null){
+function operate(first, op, second){
+    first = Number(first);
+    if(second !== null){
+        second = Number(second);
+    }
+   
     switch(op){
         case "+": return add(first, second);
         case "-": return subtract(first, second);
-        case "*":
-        case "x": 
-        case "X": return multiply(first, second);
-        case "/": return divide(first, second);
+        case "×": return multiply(first, second);
+        case "÷": return divide(first, second);
         case "%": return percentage(first);
         case "s": return swichSign(first); 
     }
@@ -40,13 +45,25 @@ function operate(first, op, second=null){
 const keys = ["AC", "C", "%","÷" ,7,8,9,"×",4,5,6,"-",1,2,3, "+","+/-",0,".","="]
 numPad = document.querySelector(".nums");
 for (let i of keys){
-    
     btn = document.createElement("button");
-    if ((!Number.isInteger(i))){btn.style.backgroundColor = "#0ed367"; btn.classList.add("op");}
-    if(i === "="){btn.style.backgroundColor = "#0b95ff";}
+    if ((!Number.isInteger(i))){
+        btn.style.backgroundColor = "#0ed367"; 
+        btn.classList.add("op");
+        if (["÷", "×", "-", "+"].includes(i)){btn.classList.add("basic_ops")}
+    }
+    
+    if (i === "=") {
+        btn.style.backgroundColor = "#0b95ff";
+        btn.classList.add("equal");
+    }
+
+    if (Number.isInteger(i)){
+        btn.classList.add("num_key");
+    }
     btn.textContent = i;
     numPad.appendChild(btn);
 }
+
 const nums = document.querySelectorAll("button")
 nums.forEach(k=>{
     k.addEventListener("mouseenter", e=>{
@@ -107,8 +124,122 @@ const result = document.querySelector("#result")
 numPad = document.querySelector(".nums");
 numPad.addEventListener("click", e=>{
     if(e.target.textContent ==="AC"){ 
-    operation.textContent = "";
+    operation.textContent = "0";
     result.textContent = "";}
     else if(e.target.textContent === "C"){
-    operation.textContent = operation.textContent.slice(0, -1)}
+    operation.textContent = operation.textContent.slice(0, -1);
+    if(operation.textContent.length === 0){operation.textContent = "0"}
+}
 })
+
+const num_keys = document.querySelectorAll(".num_key");
+num_keys.forEach(key=>{
+    key.addEventListener("click", e=>{
+        if(operation.textContent === "0"){
+            operation.textContent = e.target.textContent;
+        }
+        else {operation.textContent += e.target.textContent;}
+    });
+});
+
+function equalOperation(){
+    if(!(Number.isInteger(Number(operation.textContent)))){
+         if(!(["÷", "×", "-", "+", "%"].includes(operation.textContent.at(-1)))){
+        let cleanText = operation.textContent.replace(/\s+/g, ""); // remove all spaces
+        let min = "";
+        if(cleanText.at(0)==="-"){
+            min = "-";
+            cleanText = cleanText.slice(1);
+        }
+        parts = cleanText.split(/([+\-×÷])/);
+        parts[0] = min+parts[0];
+        let r = operate(parts[0], parts[1], parts[2]);
+        operation.textContent = r;
+        result.textContent = "";
+    }
+}
+}
+
+function nextOperation(e){
+    if(operation.textContent.replace(/\s+/g, "").length < 25){
+        if(Number.isInteger(Number(operation.textContent))){
+            operation.textContent += e.target.textContent;
+        }
+        else{    
+            if(["÷", "×", "-", "+", "%"].includes(operation.textContent.at(-1))){
+                operation.textContent = operation.textContent.slice(0, -1) + e.target.textContent;
+            } 
+            else{
+                let cleanText = operation.textContent.replace(/\s+/g, "");// remove all spaces
+                let min = "";
+                if(cleanText.at(0)==="-"){
+                    min = "-";
+                    cleanText = cleanText.slice(1);
+                }
+                parts = cleanText.split(/([+\-×÷])/);
+                parts[0] = min+parts[0];
+                let r = operate(parts[0], parts[1], parts[2]);
+                operation.textContent = r + e.target.textContent;
+                result.textContent = r;
+            }
+        }
+    }
+
+}
+const basic_ops = document.querySelectorAll(".basic_ops");
+basic_ops.forEach(ops=>{
+    ops.addEventListener("click", nextOperation);})
+
+const equal = document.querySelector(".equal");
+equal.addEventListener("click",equalOperation)
+
+document.addEventListener("keydown", e=>{
+    if(["0","1","2","3","4","5","6","7","8","9"].includes(e.key)){
+        e.preventDefault();
+
+        if(operation.textContent === "0"){
+            operation.textContent = e.key;
+        }
+        else {operation.textContent += e.key;}
+    }
+    else if(e.key === "=" || e.key==="Enter"){
+        equalOperation()
+    }
+
+    else if(e.key ==="a" || e.key === "A" || (e.key === "Backspace" && e.ctrlKey) ){
+        operation.textContent = "0";
+        result.textContent = "";
+    }
+    else if(e.key === "Backspace"){
+            operation.textContent = operation.textContent.slice(0, -1);
+        if(operation.textContent.length === 0){operation.textContent = "0"}
+    }
+
+    else if(["/", "*", "-", "+", "%"].includes(e.key)){
+        if(operation.textContent.replace(/\s+/g, "").length < 25){
+                if(Number.isInteger(Number(operation.textContent))){
+                    if(e.key === "*"){operation.textContent += "×";}
+                    else if(e.key === "/"){operation.textContent += "÷"}
+                    else{operation.textContent += e.key;}
+                }
+                else{    
+                    if(["÷", "×", "-", "+", "%"].includes(operation.textContent.at(-1))){
+                        operation.textContent = operation.textContent.slice(0, -1) + e.key;
+                    } 
+                    else{
+                        let cleanText = operation.textContent.replace(/\s+/g, "");// remove all spaces
+                        let min = "";
+                        if(cleanText.at(0)==="-"){
+                            min = "-";
+                            cleanText = cleanText.slice(1);
+                        }
+                        parts = cleanText.split(/([+\-×÷])/);
+                        parts[0] = min+parts[0];
+                        let r = operate(parts[0], parts[1], parts[2]);
+                        operation.textContent = r + e.key;
+                        result.textContent = r;
+                    }
+        }
+    }
+    }
+});
