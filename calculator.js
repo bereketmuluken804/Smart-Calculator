@@ -1,16 +1,17 @@
 function add(a, b){
-    return a + b;
+    return Math.round((a + b)*1000)/1000;
 }
 
 function subtract(a, b){
-    return a - b;
+    return Math.round((a - b) * 1000) / 1000;
 }
 
 function multiply(a, b){
-    return a * b;
+    return Math.round((a * b) * 1000) / 1000;
 }
 
 function divide(a, b){
+    if (b === 0) return "Can't divide by zero";
     num = a / b;
     return Math.round(num * 1000) / 1000;
 
@@ -55,6 +56,9 @@ for (let i of keys){
     if (i === "=") {
         btn.style.backgroundColor = "#0b95ff";
         btn.classList.add("equal");
+    }
+    if (i === "."){
+        btn.classList.add("dot");
     }
 
     if (Number.isInteger(i)){
@@ -154,6 +158,10 @@ function equalOperation(){
         parts = cleanText.split(/([+\-×÷])/);
         parts[0] = min+parts[0];
         let r = operate(parts[0], parts[1], parts[2]);
+        if(r === "Can't divide by zero"){
+                    alert(r)
+                    return;
+                }
         operation.textContent = r;
         result.textContent = "";
     }
@@ -162,7 +170,7 @@ function equalOperation(){
 
 function nextOperation(e){
     if(operation.textContent.replace(/\s+/g, "").length < 25){
-        if(Number.isInteger(Number(operation.textContent))){
+        if(!(Number.isNaN(Number(operation.textContent)))){
             operation.textContent += e.target.textContent;
         }
         else{    
@@ -179,6 +187,10 @@ function nextOperation(e){
                 parts = cleanText.split(/([+\-×÷])/);
                 parts[0] = min+parts[0];
                 let r = operate(parts[0], parts[1], parts[2]);
+                if(r === "Can't divide by zero"){
+                    alert(r)
+                    return;
+                }
                 operation.textContent = r + e.target.textContent;
                 result.textContent = r;
             }
@@ -217,7 +229,7 @@ document.addEventListener("keydown", e=>{
 
     else if(["/", "*", "-", "+", "%"].includes(e.key)){
         if(operation.textContent.replace(/\s+/g, "").length < 25){
-                if(Number.isInteger(Number(operation.textContent))){
+                if(!(Number.isNaN(Number(operation.textContent)))){
                     if(e.key === "*"){operation.textContent += "×";}
                     else if(e.key === "/"){operation.textContent += "÷"}
                     else{operation.textContent += e.key;}
@@ -243,3 +255,22 @@ document.addEventListener("keydown", e=>{
     }
     }
 });
+
+const dot = document.querySelector(".dot");
+dot.addEventListener("click", e=>{
+    if(!Number.isNaN(Number(operation.textContent + "."))){
+        operation.textContent += ".";
+    }
+    else if(Number.isNaN(Number(operation.textContent))){
+        if(Number.isInteger(Number(operation.textContent.at(-1)))){
+            let cleanText = operation.textContent.replace(/\s+/g, "");// remove all spaces
+            parts = cleanText.split(/([+\-×÷])/);
+            if(!Number.isNaN(Number(parts[2] + "."))){
+                parts[2] += ".";
+                operation.textContent = parts.join("");
+
+            }
+            operation.textContent = "".join(parts);
+        }
+    }
+})
