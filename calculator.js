@@ -89,9 +89,9 @@ const dark_btn = document.querySelector("#dark")
 light_btn.addEventListener("click", e => {
     body.style.backgroundColor = "#ffffff";
     body.style.color = "#000000";
-    calc.style.backgroundColor ="#150578";
+    calc.style.backgroundColor ="#b9e2fa";
     calc.style.boxShadow = "0 0 20px #1b0d71"
-    display.style.backgroundColor ="#26a4da";
+    display.style.backgroundColor ="#baffc6";
     
 })
 dark_btn.addEventListener("click", e => {
@@ -101,4 +101,14 @@ dark_btn.addEventListener("click", e => {
     display.style.backgroundColor ="";
     calc.style.boxShadow = "";
     
+})
+const operation = document.querySelector("#operations")
+const result = document.querySelector("#result")
+numPad = document.querySelector(".nums");
+numPad.addEventListener("click", e=>{
+    if(e.target.textContent ==="AC"){ 
+    operation.textContent = "";
+    result.textContent = "";}
+    else if(e.target.textContent === "C"){
+    operation.textContent = operation.textContent.slice(0, -1)}
 })
