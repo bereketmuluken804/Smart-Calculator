@@ -102,6 +102,7 @@ theme_btn.forEach((k)=>{
     })
 })
 const body = document.querySelector("body")
+const html = document.querySelector("html")
 const calc = document.querySelector(".calculator")
 const display = document.querySelector(".display")
 const light_btn = document.querySelector("#light")
@@ -111,6 +112,7 @@ const svg = document.querySelector("svg")
 light_btn.addEventListener("click", e => {
     body.style.backgroundColor = "#ffffff";
     body.style.color = "#000000";
+    html.style.backgroundColor = "#ffffff"
     calc.style.backgroundColor ="#b9e2fa";
     calc.style.boxShadow = "0 0 20px #1b0d71"
     display.style.backgroundColor ="#baffc6";
@@ -120,6 +122,7 @@ light_btn.addEventListener("click", e => {
 dark_btn.addEventListener("click", e => {
     body.style.backgroundColor = "";
     body.style.color = "";
+    html.style.backgroundColor = ""
     calc.style.backgroundColor =""
     display.style.backgroundColor ="";
     calc.style.boxShadow = "";
