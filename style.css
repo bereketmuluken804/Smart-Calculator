@@ -1,7 +1,7 @@
 html, body {
     width: 100%;
     height: 100%;
-    margin: 0;
+    margin: 5px;
     background-color: #10345a;
     color: white;
 }
@@ -85,7 +85,7 @@ p {
     margin: 0;
 }
 .footer {
-    padding-top: 30px;
+    padding-top: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
