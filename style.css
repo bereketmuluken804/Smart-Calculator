@@ -15,7 +15,7 @@ body {
 
 .calculator { 
     background-color: #01172F;
-    height: 650px;
+    height: 600px;
     width: 400px;
     border-radius: 10px;
     padding: 20px 10px;
@@ -36,7 +36,7 @@ body {
 .display {
     background-color: #5ab8ff;
     padding:0 10px ;
-    height: 180px;
+    height: 130px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -80,4 +80,20 @@ h1 {
     border-radius: 15px;
     border: 0;
     color: inherit;
+}
+p {
+    margin: 0;
+}
+.footer {
+    padding-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: small;
+    gap: 20px;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+svg {
+    fill: white
 }

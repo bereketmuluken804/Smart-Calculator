@@ -106,6 +106,7 @@ const calc = document.querySelector(".calculator")
 const display = document.querySelector(".display")
 const light_btn = document.querySelector("#light")
 const dark_btn = document.querySelector("#dark")
+const svg = document.querySelector("svg")
 
 light_btn.addEventListener("click", e => {
     body.style.backgroundColor = "#ffffff";
@@ -113,6 +114,7 @@ light_btn.addEventListener("click", e => {
     calc.style.backgroundColor ="#b9e2fa";
     calc.style.boxShadow = "0 0 20px #1b0d71"
     display.style.backgroundColor ="#baffc6";
+    svg.style.fill = "black";
     
 })
 dark_btn.addEventListener("click", e => {
@@ -121,6 +123,7 @@ dark_btn.addEventListener("click", e => {
     calc.style.backgroundColor =""
     display.style.backgroundColor ="";
     calc.style.boxShadow = "";
+    svg.style.fill = "white";
     
 })
 const operation = document.querySelector("#operations")
@@ -140,7 +143,7 @@ let equal_clicked = false;
 const num_keys = document.querySelectorAll(".num_key");
 num_keys.forEach(key=>{
     key.addEventListener("click", e=>{
-        if(operation.textContent.length > 22){return}
+        if(operation.textContent.length > 15){return}
         if(equal_clicked){
             operation.textContent = "";
             result.textContent = "";
@@ -189,7 +192,7 @@ function equalOperation(){
 }
 
 function nextOperation(e){
-    if(operation.textContent.replace(/\s+/g, "").length < 23){
+    if(operation.textContent.replace(/\s+/g, "").length < 16){
         if(!(Number.isNaN(Number(operation.textContent)))){
             operation.textContent += e.target.textContent;
         }
@@ -233,7 +236,7 @@ equal.addEventListener("click",equalOperation)
 document.addEventListener("keydown", e=>{
     e.preventDefault();
     if(["0","1","2","3","4","5","6","7","8","9"].includes(e.key)){
-        if(operation.textContent.length > 22){return}
+        if(operation.textContent.length > 15){return}
         if(equal_clicked){
             operation.textContent = "";
             result.textContent = "";
@@ -270,7 +273,7 @@ document.addEventListener("keydown", e=>{
     }
 
     else if(["/", "*", "-", "+", "%"].includes(e.key)){
-        if(operation.textContent.replace(/\s+/g, "").length < 23){
+        if(operation.textContent.replace(/\s+/g, "").length < 16){
                 if(!(Number.isNaN(Number(operation.textContent)))){
                     if(e.key === "*"){operation.textContent += "×";}
                     else if(e.key === "/"){operation.textContent += "÷"}
